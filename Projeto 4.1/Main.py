@@ -1,6 +1,6 @@
 from sys import stdin, stdout
 import random
-
+import time
 
 
 grid = []
@@ -11,7 +11,7 @@ def raster(A: int, B: int):
 		user_in = readln()
 		for j in range(B):
 			grid.append(int(user_in[j])) 
-	outln("RASTER GUARDADO")
+	# outln("RASTER GUARDADO")
 	return grid
 
 
@@ -42,7 +42,7 @@ def percent(num_percent: int, numbers: list):
 			output += str(percents[i])
 		else:
 			output += str(percents[i]) + " "
-	outln(output)
+	#outln(output)
 
 
 
@@ -143,38 +143,42 @@ def median(arr, n) :
 
 
 
-def main():
-	while True:
-		user_in = readln()
-		#start_time = time.time()
-		if user_in[0] == "RASTER":
-			raster(int(user_in[1]), int(user_in[2]))
+def main(test_file):
+	run_time = 0
+	with open(test_file, "r") as file:
+		try:
+			while True:
+				user_in = readln()
+				start_time = time.time()
+				if user_in[0] == "RASTER":
+					raster(int(user_in[1]), int(user_in[2]))
 
-		elif user_in[0] == "AMPLITUDE":
-			outln(amplitude())
+				elif user_in[0] == "AMPLITUDE":
+					amplitude()
+					#outln(amplitude())
 
-		elif user_in[0] == "PERCENTIL":
-			num_percent = int(user_in[1])
-			numbers = readln()
-			for i in range(len(numbers)):
-				numbers[i] = int(numbers[i])
-			percent(num_percent, numbers)
-				 
+				elif user_in[0] == "PERCENTIL":
+					num_percent = int(user_in[1])
+					numbers = readln()
+					for i in range(len(numbers)):
+						numbers[i] = int(numbers[i])
+					percent(num_percent, numbers)
+						
 
-		elif user_in[0] == "MEDIANA":
-			med = median(grid, len(grid))
-			#median = selection_algorithm(0, len(grid), len(grid) / 2)
-			outln(str(med))
+				elif user_in[0] == "MEDIANA":
+					med = median(grid, len(grid))
+					#outln(str(med))
 
-		elif user_in[0] == "TCHAU":
-			break
-		
-		else:
-			break
+				elif user_in[0] == "TCHAU":
+					break
+				
+				else:
+					break
+				run_time += (time.time() - start_time)
+		except EOFError:
+			pass
+	return run_time
 
-
-
-	return
 
 
 def readln():
@@ -186,10 +190,18 @@ def outln(string):
 
 
 
-
-
-
-
-
 if __name__=="__main__":
-	main()
+	test_files = ["test_1000.txt", "test_5000.txt", "test_10000.txt", "test_25000.txt", 
+                "test_50000.txt", "test_75000.txt",   "test_100000.txt"] #, "test_200000.txt", 
+                # "test_300000.txt", "test_400000.txt", "test_500000.txt", "test_600000.txt", 
+                # "test_700000.txt", "test_800000.txt", "test_900000.txt", "test_1000000.txt"]
+		
+	total_matrix_elm = [1000, 5000, 10000, 25000, 50000, 75000, 
+                        100000] #, 200000, 300000, 400000, 500000, 
+                        #600000, 700000, 800000, 900000, 1000000]
+
+	with open("results.txt", "w") as file:
+		for f in range(len(test_files)):
+			run_time = main(test_files[f])
+			file.write("Tempo " + str(total_matrix_elm[f]) + " casos: " + str(run_time) + "\n")
+	
