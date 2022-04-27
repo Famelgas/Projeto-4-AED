@@ -27,13 +27,14 @@ def gera_testes(test_file, total_matrix_elm):
 
 
 if __name__=="__main__":
-    test_files = ["test_1000.txt", "test_5000.txt", "test_10000.txt", "test_25000.txt", 
+    test_files = ["test_10.txt", "test_50.txt", "test_100.txt", "test_250.txt", "test_500.txt", 
+                "test_750.txt", "test_1000.txt", "test_5000.txt", "test_10000.txt", "test_25000.txt", 
                 "test_50000.txt", "test_75000.txt",   "test_100000.txt", "test_200000.txt", 
                 "test_300000.txt", "test_400000.txt", "test_500000.txt", "test_600000.txt", 
                 "test_700000.txt", "test_800000.txt", "test_900000.txt", "test_1000000.txt"]
-    total_matrix_elm = [1000, 5000, 10000, 25000, 50000, 75000, 
-                        100000, 200000, 300000, 400000, 500000, 
-                        600000, 700000, 800000, 900000, 1000000]
+    total_matrix_elm = [10, 50, 100, 250, 500, 750, 1000, 5000, 10000, 25000,
+                        50000, 75000, 100000, 200000, 300000, 400000, 
+                        500000, 600000, 700000, 800000, 900000, 1000000]
 
     for i in range(len(test_files)):
         gera_testes(test_files[i], total_matrix_elm[i])

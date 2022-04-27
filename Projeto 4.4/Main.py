@@ -1,5 +1,6 @@
+from cProfile import run
 from sys import stdin, stdout
-
+import time
 
 
 grid = []
@@ -52,15 +53,15 @@ def radix_sort(arr):
 
 
 
-def raster(A: int, B: int):
+def raster(file, A: int, B: int):
     for i in range(A):
-        user_in = readln()
+        user_in = readln(file)
         for j in range(B):
             grid.append(int(user_in[j])) 
 
     radix_sort(grid)
     
-    outln("RASTER GUARDADO")
+    #outln("RASTER GUARDADO")
     return grid
 
 
@@ -77,6 +78,8 @@ def percent(num_percent: int, numbers: list):
         for n in range(len(grid)):
             if grid[n] < numbers[i]:
                 num_below += 1
+            if grid[n] == numbers[i]:
+                break
         percent = int((num_below / len(grid)) * 100)
         if min(numbers) > percent:
             percent = 0
@@ -91,7 +94,7 @@ def percent(num_percent: int, numbers: list):
             output += str(percents[i])
         else:
             output += str(percents[i]) + " "
-    outln(output)
+    #outln(output)
 
 
 
@@ -105,40 +108,48 @@ def median():
 
 
 
-def main():
-    while True:
-        user_in = readln()
-        #start_time = time.time()
-        if user_in[0] == "RASTER":
-            raster(int(user_in[1]), int(user_in[2]))
+def main(test_file):
+    run_time = 0
+    user_in = [""]
+    with open(test_file, "r") as file:
+        try:
+            while True:
+                user_in = readln(file)
+                start_time = time.time()
+                if user_in[0] == "RASTER":
+                    raster(file, int(user_in[1]), int(user_in[2]))
 
-        elif user_in[0] == "AMPLITUDE":
-            outln(amplitude())
+                elif user_in[0] == "AMPLITUDE":
+                    amplitude()
+                    #outln(amplitude())
 
-        elif user_in[0] == "PERCENTIL":
-            num_percent = int(user_in[1])
-            numbers = readln()
-            for i in range(len(numbers)):
-                numbers[i] = int(numbers[i])
-            percent(num_percent, numbers)
-                 
+                elif user_in[0] == "PERCENTIL":
+                    num_percent = int(user_in[1])
+                    numbers = readln(file)
+                    for i in range(len(numbers)):
+                        numbers[i] = int(numbers[i])
+                    percent(num_percent, numbers)
+                        
 
-        elif user_in[0] == "MEDIANA":
-            outln(str(median()))
+                elif user_in[0] == "MEDIANA":
+                    med = median()
+                    #outln(str(median()))
 
-        elif user_in[0] == "TCHAU":
-            break
-        
-        else:
-            break
-
-
-
-    return
+                elif user_in[0] == "TCHAU":
+                    break
+                
+                else:
+                    break
 
 
-def readln():
-    return stdin.readline().rstrip().split(" ")
+                run_time += (time.time() - start_time)
+        except EOFError:
+            pass
+    return run_time
+
+
+def readln(file):
+    return file.readline().rstrip().split(" ")
 
 
 def outln(string):
@@ -148,4 +159,21 @@ def outln(string):
 
 
 if __name__=="__main__":
-    main()
+    test_files = ["test_10.txt", "test_50.txt", "test_100.txt", "test_250.txt", 
+				"test_500.txt", "test_750.txt", "test_1000.txt", "test_5000.txt", "test_10000.txt", "test_25000.txt", 
+                "test_50000.txt", "test_75000.txt",   "test_100000.txt", "test_200000.txt", 
+                "test_300000.txt", "test_400000.txt", "test_500000.txt", "test_1000000.txt"]
+    total_matrix_elm = [10, 50, 100, 250, 500, 750, 1000, 5000, 10000, 25000,
+                        50000, 75000, 100000, 500000, 1000000]
+
+    run_times = []
+
+    for f in (test_files):
+        run_time = main(f)
+        print(run_time)
+        run_times.append(main(f))
+
+    with open("results.txt", "w") as file:
+        for r in range(len(run_times)):
+            file.write("Tempo " + str(total_matrix_elm[r]) + " casos: " + str(run_times[r]) + "\n")
+	
