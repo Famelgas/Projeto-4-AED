@@ -52,11 +52,13 @@ def percent(num_percent: int, numbers: list):
 
 a, b = None, None;
 
-# Returns the correct position of
-# pivot element
+
 def partition(arr, l, r) :
 
 	lst = arr[r]; i = l; j = l;
+	
+	# vai trocando os elementos para que o indice da particao
+	# esteja onde queremos para ser devolvido
 	while (j < r) :
 		if (arr[j] < lst) :
 			arr[i], arr[j] = arr[j],arr[i];
@@ -67,17 +69,16 @@ def partition(arr, l, r) :
 	arr[i], arr[r] = arr[r],arr[i];
 	return i;
 
-# Picks a random pivot element between
-# l and r and partitions arr[l..r]
-# around the randomly picked element
-# using partition()
+
+# esolhe um pivot entre l e r e divide o array ao meio 
+# nesse pivot
 def random_partition(arr, l, r) :
 	n = r - l + 1;
 	pivot = random.randrange(1, 100) % n;
 	arr[l + pivot], arr[r] = arr[r], arr[l + pivot];
 	return partition(arr, l, r);
 
-# Utility function to find median
+
 def median_util(arr, l, r, k, a1, b1) :
 
 	global a, b;
@@ -85,52 +86,47 @@ def median_util(arr, l, r, k, a1, b1) :
 	# if l < r
 	if (l <= r) :
 		
-		# Find the partition index
+		# encontrar o index da particao
 		partition_index = random_partition(arr, l, r);
 		
-		# If partition index = k, then
-		# we found the median of odd
-		# number element in arr[]
+		# se o indice da particao for igual ao k, entao
+		# encontramos a mediana
 		if (partition_index == k) :
 			b = arr[partition_index];
 			if (a1 != -1) :
 				return;
 				
-		# If index = k - 1, then we get
-		# a & b as middle element of
-		# arr[]
+		# se index = k - 1 entao temos a e b no meio
+		# logo a mediana sera a media dos dois
 		elif (partition_index == k - 1) :
 			a = arr[partition_index];
 			if (b1 != -1) :
 				return;
 				
-		# If partition_index >= k then
-		# find the index in first half
-		# of the arr[]
+		# se o index for maior que k entao a mediana estara 
+		# na primeira metade do array
 		if (partition_index >= k) :
 			return median_util(arr, l, partition_index - 1, k, a, b);
 			
-		# If partition_index <= k then
-		# find the index in second half
-		# of the arr[]
+		# se o index for menor que k entao a mediana estara
+		# na segunda metade do array
 		else :
 			return median_util(arr, partition_index + 1, r, k, a, b);
 			
 	return;
 
-# Function to find Median
 def median(arr, n) :
 	global a;
 	global b;
 	a = -1;
 	b = -1;
 	
-	# If n is odd
+	# impar
 	if (n % 2 == 1) :
 		median_util(arr, 0, n - 1, n // 2, a, b);
 		ans = b;
 		
-	# If n is even
+	# par
 	else :
 		median_util(arr, 0, n - 1, n // 2, a, b);
 		ans = (a + b) // 2;
